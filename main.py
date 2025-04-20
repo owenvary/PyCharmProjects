@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
     QComboBox, QVBoxLayout, QHBoxLayout, QMessageBox, QDialog, QAbstractItemView,
 )
 
-from PySide6.QtCore import Qt, QEvent
+from PySide6.QtCore import Qt
 from datetime import datetime, timedelta, date
 
 from reportlab.lib.pagesizes import A4, landscape
@@ -769,6 +769,5 @@ class Window(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Window()
-    gestion_equipe = GestionEmployes()
     window.show()
     sys.exit(app.exec())

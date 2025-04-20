@@ -106,12 +106,12 @@ class EnvoiPlanning:
         message_html = f"""
         <html>
           <body>
-            <p>Bonjour,</p>
+            <p>Bonjour,</p><br>
             <p>
               Veuillez trouver ci-joint le planning de la <strong>{self.dico_date_planning['semaine']}</strong>
               pour la période <strong>{self.dico_date_planning['jours']}</strong> de l'année
               <strong>{self.dico_date_planning['annee']}</strong>.
-            </p>
+            </p><br>
             <p>Cordialement,<br>
             Patrice VARY</p>
             <hr>

@@ -1,26 +1,56 @@
-# Ignorer les fichiers Python compilés
+# >>> Python basics
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Ignorer les environnements virtuels
-venv/
-.venv/
-
-# Ignorer les fichiers de configuration de PyCharm
-.idea/
-
-# Ignorer les fichiers de logs
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
 *.log
 
-# Ignorer les fichiers générés par le système
+# >>> Virtual environment
+venv/
+env/
+ENV/
+*.pyvenv.cfg
+
+# >>> PyCharm
+.idea/
+
+# >>> OS-specific
 .DS_Store
 Thumbs.db
 
-# Ignorer les fichiers JSON ou autres données temporaires (si tu veux)
-*.json
+# >>> JSON or config files to ignore (tu peux ajouter des exceptions ici si tu veux les suivre)
+# Ignore some JSON files (comme ceux pour la configuration des mails et employés)
+# employees.json
+# mails.json
 
-# Ignorer les fichiers de cache
+# >>> Temporary files
+*.tmp
+*.temp
+tmp.*
 *.bak
 *.swp
+.tmp.driveupload/
+*.driveupload
+
+# >>> Other
+*.sqlite3
+*.db
+*.tar.gz
+*.zip
+*.rar
+*.7z
+*.gz
+
+# >>> Test outputs
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/

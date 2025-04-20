@@ -148,8 +148,6 @@ class GestionEmployes(QDialog):
             with open(self.EMPLOYEES_FILE, 'w', encoding='utf-8') as f:
                 json.dump(self.employes, f, indent=4, ensure_ascii=False)
 
-            #QMessageBox.information(self, "Succès", "Employés enregistrés avec succès.")
-
     def charger_employes(self):
         """
         Met à jour le tableau noms - mails des employés après avoir chargé els données depuis le JSON
