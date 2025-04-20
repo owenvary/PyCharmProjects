@@ -1,0 +1,150 @@
+{
+    "semaine": "Semaine 17",
+    "annee": 2025,
+    "employes": [
+        {
+            "nom": "Mathilda",
+            "horaires": {
+                "lundi": "8 - 13.5",
+                "mardi": "MAL",
+                "mercredi": "MAL",
+                "jeudi": "MAL",
+                "vendredi": "MAL",
+                "samedi": "MAL",
+                "dimanche": ""
+            }
+        },
+        {
+            "nom": "Jean-Claude",
+            "horaires": {
+                "lundi": "CP",
+                "mardi": "CP",
+                "mercredi": "CP",
+                "jeudi": "CP",
+                "vendredi": "CP",
+                "samedi": "CP",
+                "dimanche": ""
+            }
+        },
+        {
+            "nom": "Bryan",
+            "horaires": {
+                "lundi": "",
+                "mardi": "13 - 21.25",
+                "mercredi": "14 - 21.25",
+                "jeudi": "14 - 21.25",
+                "vendredi": "",
+                "samedi": "14 - 21.25",
+                "dimanche": "8.25 - 13.25"
+            }
+        },
+        {
+            "nom": "Chloé",
+            "horaires": {
+                "lundi": "",
+                "mardi": "14 - 21.25",
+                "mercredi": "14 - 21.25",
+                "jeudi": "14 - 21.25",
+                "vendredi": "14 - 21.25",
+                "samedi": "15.25 - 21.25",
+                "dimanche": ""
+            }
+        },
+        {
+            "nom": "Lucas F",
+            "horaires": {
+                "lundi": "",
+                "mardi": "CFA",
+                "mercredi": "CFA",
+                "jeudi": "CFA",
+                "vendredi": "CFA",
+                "samedi": "7 - 14",
+                "dimanche": ""
+            }
+        },
+        {
+            "nom": "Tom",
+            "horaires": {
+                "lundi": "",
+                "mardi": "7 - 14",
+                "mercredi": "7 - 14",
+                "jeudi": "7 - 14",
+                "vendredi": "7 - 14",
+                "samedi": "7 - 14",
+                "dimanche": ""
+            }
+        },
+        {
+            "nom": "Adame",
+            "horaires": {
+                "lundi": "",
+                "mardi": "",
+                "mercredi": "",
+                "jeudi": "",
+                "vendredi": "",
+                "samedi": "",
+                "dimanche": "14 - 21.25"
+            }
+        },
+        {
+            "nom": "Erwann",
+            "horaires": {
+                "lundi": "",
+                "mardi": "AFORMANCE",
+                "mercredi": "AFORMANCE",
+                "jeudi": "AFORMANCE",
+                "vendredi": "14 - 21.25",
+                "samedi": "7.25 - 14",
+                "dimanche": ""
+            }
+        },
+        {
+            "nom": "Nilton",
+            "horaires": {
+                "lundi": "8 - 13.5",
+                "mardi": "7 - 13",
+                "mercredi": "7 - 14",
+                "jeudi": "7 - 14",
+                "vendredi": "7 - 14",
+                "samedi": "",
+                "dimanche": "8.25 - 13.5"
+            }
+        },
+        {
+            "nom": "Romain",
+            "horaires": {
+                "lundi": "8 - 13.5",
+                "mardi": "7 - 14",
+                "mercredi": "5.5 - 14",
+                "jeudi": "7 - 14",
+                "vendredi": "7 - 14",
+                "samedi": "",
+                "dimanche": ""
+            }
+        },
+        {
+            "nom": "Maeva",
+            "horaires": {
+                "lundi": "MAL",
+                "mardi": "MAL",
+                "mercredi": "MAL",
+                "jeudi": "MAL",
+                "vendredi": "MAL",
+                "samedi": "MAL",
+                "dimanche": ""
+            }
+        },
+        {
+            "nom": "Owen",
+            "horaires": {
+                "lundi": "7 - 14",
+                "mardi": "7 - 14",
+                "mercredi": "7 - 14",
+                "jeudi": "7 - 14",
+                "vendredi": "7 - 14",
+                "samedi": "",
+                "dimanche": ""
+            }
+        }
+    ]
+}
