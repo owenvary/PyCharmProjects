@@ -12,19 +12,6 @@
 - **Interface simple** : Facilité d'utilisation pour les utilisateurs non techniques en incluant des raccourcis tel que copier, colelr, undo, redo.
 
 ## Structure du projet
-pythonProject/ │ 
-├── Data/ 
-│ ├── Employes_json/ # Contient employees.json avec les données des employés 
-│ ├── Plannings_json/ # Contient les fichiers JSON des plannings (planning_semaineX_202X.json) = sauvegardes du planning
-│ └── Plannings_pdf/ # Contient les fichiers PDF des plannings (planning_semaineX_202X.pdf) │ 
-├── mesProjets/ # Dossier contenant des fichiers Python et des configurations │ 
-├── Lib/ 
-│ ├── Scripts/ 
-│ └── pyvenv.cfg # Configuration de l'environnement virtuel 
-├── envoi_mails.py # Script Python pour envoyer les mails 
-├── gestion_employes.py # Script Python pour la gestion des employés 
-├── logo_carrefour_city.png # Logo du projet 
-├── main.py # Script principal du projet 
-└── test.py # Script pour les tests
+pythonProject/ │ ├── Data/ │ ├── Employes_json/ # Contient employees.json avec les données des employés │ ├── Plannings_json/ # Fichiers JSON des plannings (planning_semaineX_202X.json) = sauvegardes du planning │ └── Plannings_pdf/ # Fichiers PDF des plannings (planning_semaineX_202X.pdf) │ ├── mesProjets/ # Dossier contenant des fichiers Python et des configurations │ ├── Lib/ │ ├── Scripts/ │ └── pyvenv.cfg # Configuration de l'environnement virtuel │ ├── envoi_mails.py # Script Python pour envoyer les mails ├── gestion_employes.py # Script Python pour la gestion des employés ├── logo_carrefour_city.png # Logo du projet ├── main.py # Script principal du projet └── test.py # Script pour les tests
 
 
