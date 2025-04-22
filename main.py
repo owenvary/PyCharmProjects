@@ -6,15 +6,17 @@ import re
 import webbrowser
 from collections import defaultdict
 
-from PySide6.QtGui import QFont, QBrush, QColor, QKeyEvent, QKeySequence, QShortcut
+
+from PySide6.QtGui import QFont, QBrush, QColor, QKeyEvent, QKeySequence, QShortcut, QIcon, QPalette
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QTableWidget, QLabel, QPushButton,
     QGridLayout, QTableWidgetItem, QHeaderView, QSizePolicy,
     QComboBox, QVBoxLayout, QHBoxLayout, QMessageBox, QDialog, QAbstractItemView,
 )
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QSize
 from datetime import datetime, timedelta, date
+from PIL import Image
 
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib import colors
@@ -28,61 +30,76 @@ from gestion_employes import GestionEmployes
 from envoi_mails import EnvoiPlanning
 
 
-
 class Window(QMainWindow):
     def __init__(self):
         super().__init__()
 
         # Configuration générale
-        locale.setlocale(locale.LC_TIME, 'fr_FR')  # Dates en français
+        locale.setlocale(locale.LC_TIME, 'fr_FR')  # Pour afficher les dates en français
 
+        # Initialisation de l'objet pour la gestion des employés
         self.gestion_employes = GestionEmployes()
 
+        # Définition des répertoires de base pour stocker les fichiers JSON et PDF des plannings
         self.BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         self.PLANNINGS_JSON_DIR = os.path.join(self.BASE_DIR, "Data", "Plannings_JSON")
         self.PLANNINGS_PDF_DIR = os.path.join(self.BASE_DIR, "Data", "Plannings_PDF")
         os.makedirs(self.PLANNINGS_JSON_DIR, exist_ok=True)
         os.makedirs(self.PLANNINGS_PDF_DIR, exist_ok=True)
 
+        # Définition des chemins pour les icônes utilisées dans l'interface
+        self.save_icon = os.path.join(self.BASE_DIR, "Icones", "save_icon.png")
+        self.send_icon = os.path.join(self.BASE_DIR, "Icones", "send_icon.png")
+        self.load_icon = os.path.join(self.BASE_DIR, "Icones", "load_icon.png")
+        self.edit_icon = os.path.join(self.BASE_DIR, "Icones", "edit_icon.png")
+
+        # Chargement des employés depuis un fichier
         self.load_employees()
         self.nb_employees = len(self.employees)
 
+        # Paramétrage de la fenêtre principale
         self.setWindowTitle("Planning")
         self.setWindowState(Qt.WindowMaximized)
 
-        # Panneau central
+        # Panneau central de l'interface
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
         main_layout = QVBoxLayout(self.central_widget)
 
-        # Panneau du haut (sélection semaine + boutons charger, employés)
+        # Panneau du haut (sélection de la semaine et boutons "Charger" et "Employés")
         top_layout = QHBoxLayout()
 
-        # Menu déroulant de sélection de la semaine
+        # Menu déroulant pour la sélection de la semaine
         self.selection_semaines = QComboBox()
         self.selection_semaines.setMinimumWidth(350)
         self.integrate_week_selections(date.today().year)
 
-        # Bouton charger planning
-        self.btn_charger = QPushButton("Charger planning")
+        # Bouton pour charger le planning
+        self.btn_charger = QPushButton()
         self.btn_charger.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.btn_charger.setIcon(QIcon(self.load_icon))
+        self.btn_charger.setIconSize(QSize(48, 48))
+        self.btn_charger.setToolTip("Charger planning")
 
-        # Bouton employés
+        # Bouton pour afficher la liste des employés
         self.btn_employes = QPushButton("Liste des employés")
+        self.btn_employes.setIcon(QIcon(self.edit_icon))
+        self.btn_employes.setIconSize(QSize(48, 48))
+        self.btn_employes.setToolTip("Liste des employés")
         self.btn_employes.clicked.connect(self.lancement_interface_employes)
 
-        # Layout pour menu déroulant + bouton charger (partie gauche)
+        # Layout pour les éléments du haut (menu déroulant + bouton charger)
         left_layout = QHBoxLayout()
         left_layout.addWidget(self.selection_semaines)
         left_layout.addSpacing(15)
         left_layout.addWidget(self.btn_charger)
 
-        # Ajout des éléments au top layout
+        # Ajout des éléments au layout du haut
         top_layout.addLayout(left_layout)
         top_layout.addStretch()
-        top_layout.addWidget(self.btn_employes) # (partie droite)
+        top_layout.addWidget(self.btn_employes)
 
-        # Centre : Titre + Grille de planning
+        # Panneau central (Titre + Grille de planning)
         center_layout = QGridLayout()
 
         self.semaine_selected = self.selection_semaines.currentText()
@@ -92,68 +109,98 @@ class Window(QMainWindow):
         self.label_title.setFont(QFont('Segoe UI', 16))
         center_layout.addWidget(self.label_title, 0, 0, alignment=Qt.AlignCenter)
 
-        # Grille principale
+        # Grille de planning
         self.table = QTableWidget(self.nb_employees, 9)
         self.maj_headers_planning()
 
+        # Configuration des colonnes et lignes pour ajuster les tailles
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-        # Sélection multiple des cellules de la grille planning
+        # Sélection multiple dans la grille
         self.table.setSelectionMode(QAbstractItemView.ContiguousSelection)
         self.table.setSelectionBehavior(QAbstractItemView.SelectItems)
         self.table.installEventFilter(self)
 
         center_layout.addWidget(self.table, 1, 0)
 
-        # Apparence du planning
+        # Application des styles à la grille
         self.apply_headers_style()
         self.apply_table_style()
         self.apply_font_to_table()
         self.apply_row_colors()
 
-        # Bas : Boutons enregistrer et envoyer
+        # Bas de l'interface : Boutons "Enregistrer" et "Envoyer"
         bottom_layout = QHBoxLayout()
         bottom_layout.setSpacing(40)
 
-        self.btn_sauvegarder = QPushButton("Enregistrer planning")
-        self.btn_envoyer = QPushButton("Envoyer le planning")
+        self.btn_sauvegarder = QPushButton()
+        self.btn_sauvegarder.setIcon(QIcon(self.save_icon))
+        self.btn_sauvegarder.setIconSize(QSize(48, 48))
+        self.btn_sauvegarder.setToolTip("Enregistrer/Sauvegarder planning")
 
-        for btn in (self.selection_semaines, self.btn_charger, self.btn_employes, self.btn_sauvegarder, self.btn_envoyer):
+        self.btn_envoyer = QPushButton()
+        self.btn_envoyer.setIcon(QIcon(self.send_icon))
+        self.btn_envoyer.setIconSize(QSize(48, 48))
+        self.btn_envoyer.setToolTip("Envoyer mails")
+
+        # Style pour les boutons
+        style_btn = """
+        QPushButton {
+            background-color: #e0e0e0;  /* léger gris clair au survol */
+            border-radius: 6px;
+            padding: 15px;
+        }
+        QPushButton:hover {
+            background-color: #007A33;  /* vert foncé */
+            border-radius: 6px;
+        }
+        """
+
+        # Application du style à tous les boutons
+        for btn in (
+        self.selection_semaines, self.btn_charger, self.btn_employes, self.btn_sauvegarder, self.btn_envoyer):
             btn.setFont(QFont('Segoe UI', 14))
             btn.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+            btn.setStyleSheet(style_btn)
 
+        # Assemblage du bas de l'interface
         bottom_layout.addStretch()
         bottom_layout.addWidget(self.btn_sauvegarder)
+        bottom_layout.addStretch()
         bottom_layout.addWidget(self.btn_envoyer)
+        bottom_layout.addStretch()
 
-        # Assemblage final
+        # Assemblage final de l'interface
         main_layout.addLayout(top_layout)
         main_layout.addLayout(center_layout)
         main_layout.addLayout(bottom_layout)
 
-        # Initialisation de la colonne 'Employé'
+        # Initialisation de la colonne des employés
         self.update_employes_column()
 
-        # Création des EventListeners
+        # Connexion des boutons aux fonctions
         self.table.cellChanged.connect(self.eventListener_chgt_cellule)
         self.btn_charger.clicked.connect(self.load_planning)
         self.btn_sauvegarder.clicked.connect(self.enregistrer_planning)
-
         self.btn_envoyer.clicked.connect(self.envoi_planning)
-        # Historique pour les valeurs des cellules
+
+        # Initialisation des piles pour l'historique et la gestion des actions (Ctrl+Z / Ctrl+Y)
         self.historique = defaultdict(list)
-        self.redo_stack = defaultdict(list)  # Stack pour refaire les actions (Ctrl+Y)
+        self.redo_stack = defaultdict(list)
 
         # Initialisation de l'historique
         self.init_historique()
 
-        # Raccourcis Ctrl+Z et Ctrl+Y
+        # Raccourcis clavier
         self.raccourci_ctrl_z = QShortcut(QKeySequence("Ctrl+Z"), self)
         self.raccourci_ctrl_z.activated.connect(self.retour_en_arriere)
-
+        self.raccourci_ctrl_s = QShortcut(QKeySequence("Ctrl+S"), self)
+        self.raccourci_ctrl_s.activated.connect(self.enregistrer_planning)
         self.raccourci_ctrl_y = QShortcut(QKeySequence("Ctrl+Y"), self)
         self.raccourci_ctrl_y.activated.connect(self.refaire)
+
+
 
     def init_historique(self):
         """Initialise l'historique pour toutes les cellules de la table."""
@@ -168,6 +215,10 @@ class Window(QMainWindow):
                 self.redo_stack[(row, col)] = []  # Initialisation du stack de redo
 
     def keyPressEvent(self, event):
+        # Si la touche est Suppr (Delete) ou Retour arrière (Backspace), on réinitialise les cellules sélectionnées
+        if event.key() in (Qt.Key_Delete, Qt.Key_Backspace):
+            self.effacer_cellules_selectionnees()
+        # Gère aussi les autres événements de touche (comme Ctrl+Z, etc.)
         current_item = self.table.currentItem()
         if current_item:
             row = self.table.currentRow()
@@ -183,6 +234,31 @@ class Window(QMainWindow):
 
         super().keyPressEvent(event)
 
+    def effacer_cellules_selectionnees(self):
+        """Réinitialise les cellules sélectionnées à leur première valeur dans l'historique."""
+        selected_ranges = self.table.selectedRanges()
+
+        # Parcours toutes les plages de sélection dans le tableau
+        for selection in selected_ranges:
+            for row in range(selection.topRow(), selection.bottomRow() + 1):
+                for col in range(selection.leftColumn(), selection.rightColumn() + 1):
+                    # Réinitialiser chaque cellule sélectionnée à son état initial dans l'historique
+                    key = (row, col)
+
+                    if key in self.historique:
+                        # Récupérer la première valeur de l'historique
+                        initial_value = self.historique[key][0]  # Première valeur de l'historique
+
+                        # Réinitialiser la cellule
+                        self.table.blockSignals(True)
+                        self.table.item(row, col).setText(initial_value)
+                        self.table.blockSignals(False)
+
+                        # Mettre à jour l'historique pour la cellule avec la valeur réinitialisée
+                        self.historique[key] = [initial_value]
+        self.apply_table_style()
+
+        # self.calculer_total_ligne
     def retour_en_arriere(self):
         """Revenir à l'état précédent des cellules sélectionnées (Ctrl+Z)."""
         selected_ranges = self.table.selectedRanges()
@@ -199,6 +275,7 @@ class Window(QMainWindow):
                         self.table.blockSignals(True)
                         self.table.item(row, col).setText(previous_value)
                         self.table.blockSignals(False)
+        self.apply_table_style()
 
     def refaire(self):
         """Refaire l'action sur les cellules sélectionnées (Ctrl+Y)."""
@@ -215,6 +292,7 @@ class Window(QMainWindow):
                         self.table.blockSignals(True)
                         self.table.item(row, col).setText(value_to_redo)
                         self.table.blockSignals(False)
+        self.apply_table_style()
 
     def envoi_planning(self):
         # Demander confirmation avant d'envoyer l'email
@@ -496,9 +574,8 @@ class Window(QMainWindow):
                 week += 1
             except ValueError:
                 break
-
     def apply_headers_style(self):
-        self.table.horizontalHeader().setStyleSheet("""  
+        self.table.horizontalHeader().setStyleSheet("""
             QHeaderView::section {
                 background-color: #007A33;
                 color: white;
@@ -510,16 +587,36 @@ class Window(QMainWindow):
 
     def apply_table_style(self):
         self.table.setAlternatingRowColors(True)
-        self.table.setStyleSheet("""  
+        self.table.setStyleSheet("""
             QTableWidget {
-                background-color: #F5FFF3;
-                alternate-background-color: #E5F7E0;
-                gridline-color: #CCCCCC;
+                background-color: #F5FFF3;  /* Fond général de la table */
+                alternate-background-color: #E5F7E0;  /* Fond alterné des lignes */
+                gridline-color: #CCCCCC;  /* Couleur des lignes de grille */
                 font-family: 'Segoe UI';
                 font-size: 14pt;
+                color: black;
             }
+
             QTableWidget::item {
                 padding: 6px;
+            }
+
+            /* Style des cellules sélectionnées */
+            QTableWidget::item:selected {
+                background-color: transparent;  /* Couleur de fond pour les cellules sélectionnées */
+                color: black;  /* Couleur du texte pour les cellules sélectionnées */
+            }
+
+            /* Style lorsque la cellule est activée par un clic */
+            QTableWidget::item:selected:active {
+                background-color: transparent;  /* Fond transparent pour les cellules activées */
+                color: black;  /* Rendre le texte noir même si la cellule est activée */
+            }
+
+            /* Effet au survol d'une cellule (hover) */
+            QTableWidget::item:hover {
+                background-color: #D9EAD3;  /* Fond plus clair au survol */
+                color: black;  /* Couleur du texte */
             }
         """)
 
@@ -609,6 +706,7 @@ class Window(QMainWindow):
         self.apply_font_to_table()
         self.apply_row_colors()
 
+        QMessageBox.information(self, "Succès", f"planning_semaine{semaine_num}_{annee} a été chargé avec succès")
         print(f"Planning de la semaine {semaine_num} chargé avec succès.")
 
     def get_dates_semaine(self, semaine_num):
@@ -631,8 +729,18 @@ class Window(QMainWindow):
                 item.setText("")
 
     def enregistrer_planning(self):
-        self.enregistrer_pdf()  # Sauvegarde PDF pour l'envoi et l'impression
-        self.save_json_planning()  # Sauvegarde JSON pour le chargement
+        # Demander confirmation avant d'envoyer l'email
+        confirm = QMessageBox.question(
+            self, "Confirmation", "Voulez-vous enregistrer le planning ?",
+            QMessageBox.Yes | QMessageBox.No, QMessageBox.No,
+        )
+
+        if confirm == QMessageBox.Yes:
+            self.enregistrer_pdf()  # Sauvegarde PDF pour l'envoi et l'impression
+            self.save_json_planning()  # Sauvegarde JSON pour le chargement
+        elif confirm == QMessageBox.No:
+            QMessageBox.information(self, "Annulé", "L'enregistrement du planning a été annulé")
+
 
     def enregistrer_pdf(self):
         """

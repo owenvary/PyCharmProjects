@@ -1,5 +1,5 @@
 {
-    "semaine": "Semaine 17",
+    "semaine": "Semaine 16",
     "annee": 2025,
     "employes": [
         {
@@ -136,18 +136,6 @@
         },
         {
             "nom": "Owen",
-            "horaires": {
-                "lundi": "",
-                "mardi": "",
-                "mercredi": "",
-                "jeudi": "",
-                "vendredi": "",
-                "samedi": "",
-                "dimanche": ""
-            }
-        },
-        {
-            "nom": "Oxxow",
             "horaires": {
                 "lundi": "",
                 "mardi": "",

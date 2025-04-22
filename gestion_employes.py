@@ -3,11 +3,16 @@ import json
 import os
 
 
-from PySide6.QtGui import QFont
-from PySide6.QtWidgets import ( QTableWidget, QPushButton,
-    QTableWidgetItem, QHeaderView, QVBoxLayout, QMessageBox, QDialog
+from PySide6.QtGui import QFont, QBrush, QColor, QKeyEvent, QKeySequence, QShortcut, QIcon
+from PySide6.QtWidgets import (
+    QApplication, QMainWindow, QWidget, QTableWidget, QLabel, QPushButton,
+    QGridLayout, QTableWidgetItem, QHeaderView, QSizePolicy,
+    QComboBox, QVBoxLayout, QHBoxLayout, QMessageBox, QDialog, QAbstractItemView,
 )
 
+from PySide6.QtCore import Qt, QSize
+from datetime import datetime, timedelta, date
+from PIL import Image
 
 
 class GestionEmployes(QDialog):
@@ -26,7 +31,7 @@ class GestionEmployes(QDialog):
         self.EMPLOYEES_FILE = os.path.join(self.DATA_DIR, "employees.json")  # Chemin complet du fichier JSON
 
         # Police utilisée
-        self.setFont(QFont("Segoe UI", 12))
+        self.setFont(QFont("Segoe UI", 14))
 
         # Instance interface
         self.layout = QVBoxLayout(self)
@@ -57,6 +62,9 @@ class GestionEmployes(QDialog):
         self.btn_supprimer.clicked.connect(self.supprimer_employe)
         self.table.itemChanged.connect(self.mettre_a_jour_donnees)
         self.btn_sauvegarder.clicked.connect(self.sauvegarder_et_fermer)
+
+        self.raccourci_ctrl_s = QShortcut(QKeySequence("Ctrl+S"), self)
+        self.raccourci_ctrl_s.activated.connect(self.sauvegarder_et_fermer)
 
         # Charger les données depuis le JSON
         self.employes = []

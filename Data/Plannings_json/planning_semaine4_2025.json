@@ -1,0 +1,30 @@
+{
+    "semaine": "Semaine 4",
+    "annee": 2025,
+    "employes": [
+        {
+            "nom": "Owen",
+            "horaires": {
+                "lundi": "7-14",
+                "mardi": "10",
+                "mercredi": "",
+                "jeudi": "",
+                "vendredi": "",
+                "samedi": "",
+                "dimanche": ""
+            }
+        },
+        {
+            "nom": "Patrice",
+            "horaires": {
+                "lundi": "",
+                "mardi": "",
+                "mercredi": "",
+                "jeudi": "",
+                "vendredi": "",
+                "samedi": "",
+                "dimanche": ""
+            }
+        }
+    ]
+}
