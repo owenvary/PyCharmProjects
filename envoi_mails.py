@@ -1,19 +1,23 @@
 import smtplib
 import json
 import re
-
+import sys
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 import os
 
+def resource_path(relative_path):
+    """Retourne le chemin absolu d’un fichier compatible dev/exe"""
+    base_path = getattr(sys, '_MEIPASS', os.path.abspath("."))
+    return os.path.join(base_path, relative_path)
 class EnvoiPlanning:
     def __init__(self, window):
         self.window = window
-        self.BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        self.PLANNINGS_PDF_DIR = os.path.join(self.BASE_DIR, "Data", "Plannings_pdf")
-        self.EMPLOYEES_FILE = os.path.join(self.BASE_DIR, "Data", "Employes_json", "employees.json") # Chemin complet du fichier JSON
-        self.MAILS_FILE = os.path.join(self.BASE_DIR, "mails.json")  # Chemin du fichier mails.json
+
+        self.PLANNINGS_PDF_DIR = resource_path("Data/Plannings_pdf")
+        self.EMPLOYEES_FILE = resource_path("Data/Employes_json/employees.json")
+        self.MAILS_FILE = resource_path("Data/Mails_json/mail_config.json")
 
         self.semaine_selected = self.get_semaine()
 
@@ -64,14 +68,31 @@ class EnvoiPlanning:
             print("Le fichier mails.json est manquant ou invalide.")
             return None
 
-    def send_email_with_pdf(self):
+    def send_email_with_pdf(self, selected_names=None):
+        employes = self.get_donnees_employes()
+
+        # Créer un dictionnaire nom -> email
+        nom_to_email = {employe.get("nom", ""): employe.get("email", "") for employe in employes}
+
+        if selected_names is None:
+            # Aucun nom sélectionné -> on prend tout le monde
+            selected_emails = [email for email in nom_to_email.values() if email]
+        else:
+            # Retrouver les emails correspondant aux noms sélectionnés
+            selected_emails = [nom_to_email.get(nom) for nom in selected_names if nom_to_email.get(nom)]
+
+        # Ajouter Codir si besoin
+        codir_email = "fleck.sophie@gmail.com"
+        if "Sophie" in selected_names and codir_email not in selected_emails:
+            selected_emails.append(codir_email)
+
         # Obtenez les informations de configuration depuis mails.json
         self.get_dates_mails(self.semaine_selected)
         email_config = self.get_email_config()
         if email_config is None:
             return
 
-        email_envoi = email_config.get("email", "")
+        email_envoi = email_config.get("email_envoi", "")
         mdp = email_config.get("pwd", "")
         serveur = email_config.get("serveur", "")
 
@@ -80,7 +101,6 @@ class EnvoiPlanning:
         except (ValueError, TypeError):
             print("Le port SMTP doit être un entier.")
             return
-        #port = int(email_config.get("port", 465))
 
         if not email_envoi or not mdp or not serveur or not port:
             print("Les informations de configuration du serveur SMTP sont incomplètes.")
@@ -93,12 +113,9 @@ class EnvoiPlanning:
         # Créer un message MIME multipart
         message = MIMEMultipart()
         message["From"] = email_envoi
-        # Récupérer tous les e-mails des employés
-        emails_destinataires = [employe["email"] for employe in self.extraire_mails()]
-        email_vice_dir = "fleck.sophie@gmail.com"
-        emails_destinataires.append(email_vice_dir)
-        message["To"] = ", ".join(emails_destinataires)  # Placer tous les e-mails dans le champ "To"
+        message["To"] = ", ".join(selected_emails)  # Utiliser les emails sélectionnés
         message["Subject"] = f"Planning de la {self.dico_date_planning['semaine']}"
+
 
         # Texte du message avec les informations de la semaine
         mail_pro = "patrice_vary@franchise.carrefour.com"
@@ -137,9 +154,11 @@ class EnvoiPlanning:
                 # Connexion au serveur SMTP de Gmail et envoi de l'e-mail
                 with smtplib.SMTP_SSL(serveur, port) as smtp_server:
                     smtp_server.login(email_envoi, mdp)
-                    smtp_server.sendmail(email_envoi, emails_destinataires, message.as_string())
+                    smtp_server.sendmail(email_envoi, selected_emails, message.as_string())
                     print("E-mail envoyé avec succès avec la pièce jointe !")
+                    return True #Pour que success = True et affiché le bon popup
             except Exception as e:
                 print(f"Une erreur est survenue lors de l'envoi du mail : {e}")
         else:
             print(f"Le fichier PDF {pdf_file_name} n'existe pas à l'emplacement spécifié.")
+

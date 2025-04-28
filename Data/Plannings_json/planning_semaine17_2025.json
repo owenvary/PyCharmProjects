@@ -5,72 +5,36 @@
         {
             "nom": "Mathilda",
             "horaires": {
-                "lundi": "",
-                "mardi": "",
-                "mercredi": "",
-                "jeudi": "",
-                "vendredi": "",
-                "samedi": "",
+                "lundi": "8 - 13.5",
+                "mardi": "14 - 21.25",
+                "mercredi": "MAL",
+                "jeudi": "MAL",
+                "vendredi": "MAL",
+                "samedi": "MAL",
                 "dimanche": ""
             }
         },
         {
-            "nom": "Jean-Claude",
+            "nom": "Lucas",
             "horaires": {
                 "lundi": "",
-                "mardi": "",
-                "mercredi": "",
-                "jeudi": "",
-                "vendredi": "",
-                "samedi": "",
+                "mardi": "CFA",
+                "mercredi": "CFA",
+                "jeudi": "CFA",
+                "vendredi": "CFA",
+                "samedi": "7 - 14",
                 "dimanche": ""
             }
         },
         {
-            "nom": "Bryan",
+            "nom": "Erwann",
             "horaires": {
                 "lundi": "",
-                "mardi": "",
-                "mercredi": "",
-                "jeudi": "",
-                "vendredi": "",
-                "samedi": "",
-                "dimanche": ""
-            }
-        },
-        {
-            "nom": "Chloé",
-            "horaires": {
-                "lundi": "",
-                "mardi": "",
-                "mercredi": "",
-                "jeudi": "",
-                "vendredi": "",
-                "samedi": "",
-                "dimanche": ""
-            }
-        },
-        {
-            "nom": "Lucas F",
-            "horaires": {
-                "lundi": "",
-                "mardi": "",
-                "mercredi": "",
-                "jeudi": "",
-                "vendredi": "",
-                "samedi": "",
-                "dimanche": ""
-            }
-        },
-        {
-            "nom": "Tom",
-            "horaires": {
-                "lundi": "",
-                "mardi": "",
-                "mercredi": "",
-                "jeudi": "",
-                "vendredi": "",
-                "samedi": "",
+                "mardi": "AFORMANCE",
+                "mercredi": "AFORMANCE",
+                "jeudi": "AFORMANCE",
+                "vendredi": "14 - 21.25",
+                "samedi": "7.25 - 14",
                 "dimanche": ""
             }
         },
@@ -82,18 +46,18 @@
                 "mercredi": "",
                 "jeudi": "",
                 "vendredi": "",
-                "samedi": "",
+                "samedi": "14 - 21.25",
                 "dimanche": ""
             }
         },
         {
-            "nom": "Erwann",
+            "nom": "Maéva",
             "horaires": {
-                "lundi": "",
-                "mardi": "",
-                "mercredi": "",
-                "jeudi": "",
-                "vendredi": "",
+                "lundi": "CM",
+                "mardi": "CM",
+                "mercredi": "CM",
+                "jeudi": "CM",
+                "vendredi": "CM",
                 "samedi": "",
                 "dimanche": ""
             }
@@ -101,61 +65,97 @@
         {
             "nom": "Nilton",
             "horaires": {
-                "lundi": "",
-                "mardi": "",
-                "mercredi": "",
-                "jeudi": "",
-                "vendredi": "",
+                "lundi": "8 - 13.5",
+                "mardi": "7 - 13",
+                "mercredi": "7 - 14",
+                "jeudi": "7 - 14",
+                "vendredi": "7 - 14",
                 "samedi": "",
+                "dimanche": "8.25 - 13.25"
+            }
+        },
+        {
+            "nom": "Tom",
+            "horaires": {
+                "lundi": "",
+                "mardi": "7 - 14",
+                "mercredi": "7 - 14",
+                "jeudi": "7 - 14",
+                "vendredi": "7 - 14",
+                "samedi": "7 - 14",
+                "dimanche": ""
+            }
+        },
+        {
+            "nom": "Bryan",
+            "horaires": {
+                "lundi": "",
+                "mardi": "13 - 21.25",
+                "mercredi": "14 - 21.25",
+                "jeudi": "14 - 21.25",
+                "vendredi": "",
+                "samedi": "14 - 21.25",
+                "dimanche": "8.25 - 13.25"
+            }
+        },
+        {
+            "nom": "Jean-Claude",
+            "horaires": {
+                "lundi": "CP",
+                "mardi": "CP",
+                "mercredi": "CP",
+                "jeudi": "CP",
+                "vendredi": "CP",
+                "samedi": "CP",
                 "dimanche": ""
             }
         },
         {
             "nom": "Romain",
             "horaires": {
-                "lundi": "",
-                "mardi": "",
-                "mercredi": "",
-                "jeudi": "",
-                "vendredi": "",
+                "lundi": "8 - 13.5",
+                "mardi": "7 - 14",
+                "mercredi": "5.5 - 14",
+                "jeudi": "7 - 14",
+                "vendredi": "7 - 14",
                 "samedi": "",
                 "dimanche": ""
             }
         },
         {
-            "nom": "Maeva",
+            "nom": "Chloé",
             "horaires": {
                 "lundi": "",
-                "mardi": "",
-                "mercredi": "",
-                "jeudi": "",
-                "vendredi": "",
-                "samedi": "",
+                "mardi": "14 - 21.25",
+                "mercredi": "14 - 21.25",
+                "jeudi": "14 - 21.25",
+                "vendredi": "14 - 21.25",
+                "samedi": "15.25 - 21.25",
                 "dimanche": ""
             }
         },
         {
             "nom": "Owen",
             "horaires": {
-                "lundi": "",
-                "mardi": "",
-                "mercredi": "",
-                "jeudi": "",
-                "vendredi": "",
+                "lundi": "7 - 14",
+                "mardi": "7 - 14",
+                "mercredi": "7 - 14",
+                "jeudi": "7 - 14",
+                "vendredi": "7 - 14",
                 "samedi": "",
                 "dimanche": ""
             }
         },
         {
-            "nom": "Oxxow",
+            "nom": "P. VARY",
             "horaires": {
                 "lundi": "",
-                "mardi": "",
+                "mardi": "MATIN",
                 "mercredi": "",
-                "jeudi": "",
-                "vendredi": "",
-                "samedi": "",
-                "dimanche": ""
+                "jeudi": "MATIN",
+                "vendredi": "MATIN",
+                "samedi": "MATIN",
+                "dimanche": "MATIN"
             }
         }
     ]

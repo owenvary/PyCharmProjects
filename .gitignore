@@ -23,7 +23,7 @@ Thumbs.db
 
 # >>> JSON or config files to ignore (tu peux ajouter des exceptions ici si tu veux les suivre)
 # Ignore some JSON files (comme ceux pour la configuration des mails et employés)
-# employees.json
+# expl_employees.json
 # mails.json
 
 # >>> Temporary files

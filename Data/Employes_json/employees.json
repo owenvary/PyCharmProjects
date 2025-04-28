@@ -1,50 +1,67 @@
 [
     {
+        "nom": "Lucas",
+        "email": "nouveau@mail.com",
+        "contrat": "ALTERNANT"
+    },
+    {
         "nom": "Mathilda",
-        "email": "nouveau@mail.com"
-    },
-    {
-        "nom": "Jean-Claude",
-        "email": "nouveau@mail.com"
-    },
-    {
-        "nom": "Bryan",
-        "email": "nouveau@mail.com"
-    },
-    {
-        "nom": "Chloé",
-        "email": "nouveau@mail.com"
-    },
-    {
-        "nom": "Lucas F",
-        "email": "nouveau@mail.com"
-    },
-    {
-        "nom": "Tom",
-        "email": "nouveau@mail.com"
-    },
-    {
-        "nom": "Adame",
-        "email": "nouveau@mail.com"
+        "email": "nouveau@mail.com",
+        "contrat": "35h"
     },
     {
         "nom": "Erwann",
-        "email": "nouveau@mail.com"
+        "email": "nouveau@mail.com",
+        "contrat": "ALTERNANT"
+    },
+    {
+        "nom": "Adame",
+        "email": "nouveau@mail.com",
+        "contrat": "ÉTUDIANT"
+    },
+    {
+        "nom": "Maéva",
+        "email": "nouveau@mail.com",
+        "contrat": "35h"
     },
     {
         "nom": "Nilton",
-        "email": "nouveau@mail.com"
+        "email": "nouveau@mail.com",
+        "contrat": "35h"
+    },
+    {
+        "nom": "Tom",
+        "email": "nouveau@mail.com",
+        "contrat": "ALTERNANT"
+    },
+    {
+        "nom": "Bryan",
+        "email": "nouveau@mail.com",
+        "contrat": "35h"
+    },
+    {
+        "nom": "Jean-Claude",
+        "email": "nouveau@mail.com",
+        "contrat": "33h"
     },
     {
         "nom": "Romain",
-        "email": "nouveau@mail.com"
+        "email": "nouveau@mail.com",
+        "contrat": "35h"
     },
     {
-        "nom": "Maeva",
-        "email": "nouveau@mail.com"
+        "nom": "Chloé",
+        "email": "nouveau@mail.com",
+        "contrat": "ALTERNANT"
     },
     {
         "nom": "Owen",
-        "email": "nouveau@mail.com"
+        "email": "owen.vary@isen-ouest.yncrea.fr",
+        "contrat": "35h"
+    },
+    {
+        "nom": "P. VARY",
+        "email": "nouveau@mail.com",
+        "contrat": "PATRON"
     }
 ]
