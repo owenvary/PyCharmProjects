@@ -17,13 +17,15 @@ class GestionEmployes(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
 
+        # Importer les données
         self.fast_planning_img = resource_path("Images/FastPlanning_logo.png")
         self.DATA_DIR = resource_path("Data/Employes_json")
         self.EMPLOYEES_FILE = resource_path("Data/Employes_json/employees.json")
 
-        # Header + dimension fenêtre
+        # Nom + dimension fenêtre
         self.setWindowTitle("Liste des employés")
         self.setMinimumSize(800, 600)
+
         # Police utilisée
         self.setFont(QFont("Segoe UI", 14))
         self.setWindowIcon(QIcon(self.fast_planning_img))
@@ -32,26 +34,26 @@ class GestionEmployes(QDialog):
         self.layout = QVBoxLayout(self)
 
         # Création du tableau nx2
-        self.table = QTableWidget()
-        self.table.setColumnCount(4)  # Ajouter une colonne pour le contrat
+        self.tableau_gestion = QTableWidget()
+        self.tableau_gestion.setColumnCount(4)  # Nom | Mail | Contrat | Déplacer
 
         # Headers tableau
-        self.table.setHorizontalHeaderLabels(["Nom", "Email", "Contrat", "Déplacer"])
-        self.table.horizontalHeader().setStretchLastSection(False)
+        self.tableau_gestion.setHorizontalHeaderLabels(["Nom", "Email", "Contrat", "Déplacer"])
+        self.tableau_gestion.horizontalHeader().setStretchLastSection(False)
 
         # Réglage des colonnes
-        self.table.setColumnWidth(0, 150)  # Largeur de la colonne "Nom"
-        self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)  # Email
-        self.table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)  # Contrat
-        self.table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)  # Déplacer
-
-        # Intégration du tableau
-        self.layout.addWidget(self.table)
+        self.tableau_gestion.setColumnWidth(0, 150)  # Largeur de la colonne "Nom"
+        self.tableau_gestion.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)  # Email
+        self.tableau_gestion.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)  # Contrat
+        self.tableau_gestion.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)  # Déplacer
 
         # Création des boutons
         self.btn_ajouter = QPushButton("Ajouter un employé")
         self.btn_supprimer = QPushButton("Supprimer l'employé sélectionné")
         self.btn_sauvegarder = QPushButton("Sauvegarder les modifications")
+
+        # Intégration du tableau
+        self.layout.addWidget(self.tableau_gestion)
 
         # Intégration des boutons
         for btn in (self.btn_ajouter, self.btn_sauvegarder, self.btn_supprimer):
@@ -60,9 +62,10 @@ class GestionEmployes(QDialog):
         # EventListeners : btn -> fonctions
         self.btn_ajouter.clicked.connect(self.ajouter_employe)
         self.btn_supprimer.clicked.connect(self.supprimer_employe)
-        self.table.itemChanged.connect(self.mettre_a_jour_donnees)  # Connecter la modification des cellules
+        self.tableau_gestion.itemChanged.connect(self.mettre_a_jour_donnees)  # Connecter la modification des cellules
         self.btn_sauvegarder.clicked.connect(self.sauvegarder_et_fermer)
 
+        # Raccourcis
         self.raccourci_ctrl_s = QShortcut(QKeySequence("Ctrl+S"), self)
         self.raccourci_ctrl_s.activated.connect(self.sauvegarder_et_fermer)
 
@@ -70,8 +73,9 @@ class GestionEmployes(QDialog):
         self.employes = []
         self.load_employes()
 
+    #---MAJ planning, tableau, fichiers json---
     def load_employes(self):
-        """Charge les employés depuis EMPLOYEES_FILE, initialise une liste vide si le fichier est inexistant."""
+        """Charge les employés depuis EMPLOYEES_FILE, initialise le contrat à 35h si le champ est manquant"""
         directory = os.path.dirname(self.EMPLOYEES_FILE)
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -81,10 +85,10 @@ class GestionEmployes(QDialog):
                 with open(self.EMPLOYEES_FILE, "r", encoding="utf-8") as f:
                     self.employes = json.load(f)
 
-                # Ajouter le champ "contrat" pour chaque employé si absent
+                # Initialiser contrat à 35h si inexistant
                 for employe in self.employes:
                     if "contrat" not in employe:
-                        employe["contrat"] = "35h"  # Valeur par défaut pour le contrat
+                        employe["contrat"] = "35h"
 
             except Exception as e:
                 QMessageBox.warning(self, "Erreur", f"Impossible de charger les employés : {e}")
@@ -97,23 +101,24 @@ class GestionEmployes(QDialog):
 
     def update_table(self):
         """Remplit le tableau avec la liste actuelle d'employés et ajoute les flèches pour chaque ligne."""
-        self.table.blockSignals(True)
-        self.table.setRowCount(len(self.employes))
+        self.tableau_gestion.blockSignals(True)
+        self.tableau_gestion.setRowCount(len(self.employes))
 
         for row, employe in enumerate(self.employes):
-            self.table.setItem(row, 0, QTableWidgetItem(employe.get("nom", "")))
-            self.table.setItem(row, 1, QTableWidgetItem(employe.get("email", "")))
+            # 2 premières colonnes
+            self.tableau_gestion.setItem(row, 0, QTableWidgetItem(employe.get("nom", "")))
+            self.tableau_gestion.setItem(row, 1, QTableWidgetItem(employe.get("email", "")))
 
-            # Création du menu déroulant (QComboBox) pour le contrat
+            # Création du menu déroulant (QComboBox) pour le contrat | 3è colonne
             contrat_combobox = QComboBox()
             contrat_combobox.addItems(["33h", "35h", "39h", "ALTERNANT", "ÉTUDIANT", "PATRON"])
             contrat_combobox.setCurrentText(employe.get("contrat", "35h"))  # Sélectionner la valeur actuelle
 
             contrat_combobox.currentTextChanged.connect(lambda text, row=row: self.mettre_a_jour_contrat(text, row))
 
-            self.table.setCellWidget(row, 2, contrat_combobox)
+            self.tableau_gestion.setCellWidget(row, 2, contrat_combobox)
 
-            # Créer le layout pour les deux flèches
+            # 4è colonne
             cell_widget = QWidget()
             layout = QHBoxLayout()
             layout.setContentsMargins(0, 0, 0, 0)
@@ -122,6 +127,7 @@ class GestionEmployes(QDialog):
             btn_up = QPushButton("\u25B2")  # 🔼
             btn_down = QPushButton("\u25BC")  # 🔽
 
+            # Taille
             btn_up.setFixedSize(30, 25)
             btn_down.setFixedSize(30, 25)
 
@@ -132,15 +138,16 @@ class GestionEmployes(QDialog):
             btn_up.clicked.connect(lambda _, r=row: self.deplacer_haut(r))
             btn_down.clicked.connect(lambda _, r=row: self.deplacer_bas(r))
 
+            # Intégration
             layout.addWidget(btn_up)
             layout.addWidget(btn_down)
 
             layout.setAlignment(Qt.AlignCenter)
             cell_widget.setLayout(layout)
 
-            self.table.setCellWidget(row, 3, cell_widget)
+            self.tableau_gestion.setCellWidget(row, 3, cell_widget)
 
-        self.table.blockSignals(False)
+        self.tableau_gestion.blockSignals(False)
 
     def mettre_a_jour_contrat(self, text, row):
         """Met à jour le contrat de l'employé dans la liste interne."""
@@ -157,6 +164,15 @@ class GestionEmployes(QDialog):
         elif column == 1:  # Email
             self.employes[row]["email"] = item.text()
 
+    def save_employes(self):
+        """Sauvegarde les employés dans le fichier JSON."""
+        try:
+            with open(self.EMPLOYEES_FILE, "w", encoding="utf-8") as f:
+                json.dump(self.employes, f, ensure_ascii=False, indent=4)
+        except Exception as e:
+            QMessageBox.warning(self, "Erreur", f"Erreur lors de la sauvegarde : {e}")
+
+    # Swap les lignes (haut - bas)
     def deplacer_haut(self, row):
         """Déplace la ligne sélectionnée vers le haut."""
         if row > 0:
@@ -169,14 +185,8 @@ class GestionEmployes(QDialog):
             self.employes[row], self.employes[row + 1] = self.employes[row + 1], self.employes[row]
             self.update_table()
 
-    def save_employes(self):
-        """Sauvegarde les employés dans le fichier JSON."""
-        try:
-            with open(self.EMPLOYEES_FILE, "w", encoding="utf-8") as f:
-                json.dump(self.employes, f, ensure_ascii=False, indent=4)
-        except Exception as e:
-            QMessageBox.warning(self, "Erreur", f"Erreur lors de la sauvegarde : {e}")
 
+    #---ACTIONS BTN---
     def ajouter_employe(self):
         """Ajoute un nouvel employé par défaut au tableau."""
         self.employes.append({
@@ -188,7 +198,7 @@ class GestionEmployes(QDialog):
 
     def supprimer_employe(self):
         """Supprime l'employé sélectionné après confirmation du pop-up."""
-        row = self.table.currentRow()
+        row = self.tableau_gestion.currentRow()
         if row >= 0:
             confirm = QMessageBox.question(
                 self, "Confirmation", "Supprimer cet employé ?",

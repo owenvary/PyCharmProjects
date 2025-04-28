@@ -28,15 +28,18 @@ class EnvoiPlanning:
         }
 
     def get_semaine(self):
+        # Récupère la semaine choisie
         return self.window.semaine_selected
 
     def get_donnees_employes(self):
+        # Charge le fichier employees.json
         if os.path.exists(self.EMPLOYEES_FILE):
             with open(self.EMPLOYEES_FILE, "r", encoding="utf-8") as f:
                 return json.load(f)
         return []
 
     def extraire_mails(self):
+        # Récupérer les emails destinataires
         return [
             {"email": employe.get("email", "")}
             for employe in self.get_donnees_employes()
@@ -44,19 +47,18 @@ class EnvoiPlanning:
         ]
 
     def get_dates_mails(self, semaine_selected):
-
+        # Récupérer les valeurs temporelles (DD/MM/YYYY) et les placent dans un dico
         if semaine_selected and isinstance(semaine_selected, str): #semaine selected : "semaine XX - du DD/MM au DD/MM - YYYY"
             parties = re.split(" - ", semaine_selected)
             self.dico_date_planning["semaine"] = parties[0]
-            print(self.dico_date_planning["semaine"])
+            #print(self.dico_date_planning["semaine"])
             self.dico_date_planning["jours"] = parties[1]
-            print(self.dico_date_planning["jours"])
+            #print(self.dico_date_planning["jours"])
             self.dico_date_planning["annee"] = parties[2]
-            print(self.dico_date_planning["annee"])
+            #print(self.dico_date_planning["annee"])
             return
         else:
             return "Erreur lors de la lecture de la semaine choisie"
-
 
     def get_email_config(self):
         # Charger la configuration du fichier mails.json
@@ -69,6 +71,9 @@ class EnvoiPlanning:
             return None
 
     def send_email_with_pdf(self, selected_names=None):
+        """
+        Envoi le mail aux personnes sélectionnés, l'objet, le message et la pièce jointe sont dynamiques.
+        """
         employes = self.get_donnees_employes()
 
         # Créer un dictionnaire nom -> email
@@ -86,12 +91,13 @@ class EnvoiPlanning:
         if "Sophie" in selected_names and codir_email not in selected_emails:
             selected_emails.append(codir_email)
 
-        # Obtenez les informations de configuration depuis mails.json
+        # Vérifier l'existence de mails.json
         self.get_dates_mails(self.semaine_selected)
         email_config = self.get_email_config()
         if email_config is None:
             return
 
+        # Récupère les champs de mails.json
         email_envoi = email_config.get("email_envoi", "")
         mdp = email_config.get("pwd", "")
         serveur = email_config.get("serveur", "")

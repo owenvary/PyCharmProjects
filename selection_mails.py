@@ -1,6 +1,5 @@
-from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QListWidget, QPushButton, QCheckBox, QDialogButtonBox, QLabel, QMessageBox
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QFont
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QCheckBox, QDialogButtonBox
+
 
 class SelectionMails(QDialog):
     def __init__(self, employes, parent=None):
