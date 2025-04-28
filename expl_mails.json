@@ -1,0 +1,6 @@
+{
+        "email_envoi": "owen.xxxx@gmail.com",
+        "port": 465,
+        "serveur": "smtp.gmail.com",
+        "pwd": "xxxx xxxx xxxx xxxx"
+    }
