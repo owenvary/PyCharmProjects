@@ -6,15 +6,21 @@
 
 ## Fonctionnalités
 
-- **Gestion des employés** : Ajout, modification et suppression des employés. Incluant la gestion de leurs emails pour l'envoi.
+- **Gestion des employés** : Ajout, modification et suppression des employés. Incluant la gestion de leurs emails pour l'envoi ainsi que la gestiond e leur contrat.
 - **Génération des plannings** : Création automatique des plannings hebdomadaires avec une option de chargement d'anciens plannings pour faciliter la création.
 - **Envoi d'emails** : Envoi d'emails aux employés pour les informer de leurs horaires.
-- **Interface simple** : Facilité d'utilisation pour les utilisateurs non techniques en incluant des raccourcis tel que copier, colelr, undo, redo.
+- **Interface simple** : Facilité d'utilisation pour les utilisateurs non techniques en incluant des raccourcis tel que enregistrer, copier, coller, couper, undo, redo.
+- **Auto-Analyse du planning** : Analyse du contenu du planning en cours de création. Relève les sous effectifs, la confirmité des créneaux de chaque employés (total par rapport au contrat, chevauchements).
+- **Infos** : Ouverture du guide d'utilisation dans le navigateur par défault sous condition de cliquer sur le bouton 'infos'
 
 ## Structure du projet
 
 ```text
 pythonProject/
+│
+├── Images/
+│   ├── FastPlanning.png      # Logo de l'application, généré par une IA
+│   └── logo_carrefour_city   # Logo officiel Carrefour City
 │
 ├── Data/
 │   ├── Employes_json/        # Contient employees.json avec les données des employés
@@ -28,9 +34,10 @@ pythonProject/
 │
 ├── envoi_mails.py            # Script Python pour envoyer les mails
 ├── gestion_employes.py       # Script Python pour la gestion des employés
-├── logo_carrefour_city.png   # Logo du projet
+├── selection_mails.py        #Script Python pour sélectionner à qui envoyer le planning
 ├── main.py                   # Script principal du projet
-└── test.py                   # Script pour les tests
+├── test.py                   # Script pour les tests
+└── pré-Guide d'utilisation FastPlanning.pdf # Guide d'utilisation step by step pdf
 ```
 
 
