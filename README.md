@@ -19,6 +19,7 @@
 pythonProject/
 │
 ├── Images/
+│   ├── FastPlanning_icone.ico# Icône de l'application, (icône de bureau)
 │   ├── FastPlanning.png      # Logo de l'application, généré par une IA
 │   └── logo_carrefour_city   # Logo officiel Carrefour City
 │
@@ -32,6 +33,8 @@ pythonProject/
 │   ├── Scripts/
 │   └── pyvenv.cfg            # Configuration de l'environnement virtuel
 │
+├── Police/               # Contient une police d'écriture pour la mise en pdf
+│ 
 ├── envoi_mails.py            # Script Python pour envoyer les mails
 ├── gestion_employes.py       # Script Python pour la gestion des employés
 ├── selection_mails.py        #Script Python pour sélectionner à qui envoyer le planning
