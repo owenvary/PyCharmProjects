@@ -40,7 +40,7 @@ pythonProject/
 ├── selection_mails.py        #Script Python pour sélectionner à qui envoyer le planning
 ├── main.py                   # Script principal du projet
 ├── test.py                   # Script pour les tests
-└── pré-Guide d'utilisation FastPlanning.pdf # Guide d'utilisation step by step pdf
+└── Guide d'utilisation FastPlanning.pdf # Guide d'utilisation step by step pdf
 ```
 
 
